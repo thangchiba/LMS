@@ -1,14 +1,12 @@
 'use client'
 
 import axios from 'axios'
-import MuxPlayer from '@mux/mux-player-react'
 import { useState } from 'react'
 import { toast } from 'react-hot-toast'
 import { useRouter } from 'next/navigation'
 import { Loader2, Lock } from 'lucide-react'
-
-import { cn } from '@/lib/utils'
 import { useConfettiStore } from '@/hooks/use-confetti-store'
+import YouTube from 'react-youtube'
 
 interface VideoPlayerProps {
   playbackId: string
@@ -70,13 +68,31 @@ export const VideoPlayer = ({
         </div>
       )}
       {!isLocked && (
-        <MuxPlayer
-          title={title}
-          className={cn(!isReady && 'hidden')}
-          onCanPlay={() => setIsReady(true)}
-          onEnded={onEnd}
-          // autoPlay
-          playbackId={playbackId}
+        // <MuxPlayer
+        //   title={title}
+        //   className={cn(!isReady && 'hidden')}
+        //   onCanPlay={() => setIsReady(true)}
+        //   onEnded={onEnd}
+        //   // autoPlay
+        //   playbackId={playbackId}
+        // />
+        <YouTube
+          videoId="mkFDlAXRNb4&ab"
+          // videoId={playbackId}
+          opts={{
+            height: '390',
+            width: '640',
+            playerVars: {
+              autoplay: 1,
+              controls: 1,
+              rel: 0,
+              showinfo: 0,
+              mute: 0,
+              origin: 'https://lms.thangchiba.com',
+            },
+          }}
+          onReady={() => setIsReady(true)}
+          onEnd={onEnd}
         />
       )}
     </div>
