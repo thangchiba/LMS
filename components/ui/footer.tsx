@@ -11,7 +11,6 @@ export function Footer() {
             <span>Hoang Van Thang / ThangChiba</span>
           </div>
           <SocialAccounts />
-          <div className="mb-5" />
         </div>
       </div>
     </footer>
