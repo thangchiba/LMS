@@ -1,30 +1,27 @@
-import { auth } from "@clerk/nextjs";
-import { Chapter, Course, UserProgress } from "@prisma/client"
-import { redirect } from "next/navigation";
+import { auth } from '@clerk/nextjs'
+import { Chapter, Course, UserProgress } from '@prisma/client'
+import { redirect } from 'next/navigation'
 
-import { db } from "@/lib/db";
-import { CourseProgress } from "@/components/course-progress";
+import { db } from '@/lib/db'
+import { CourseProgress } from '@/components/course-progress'
 
-import { CourseSidebarItem } from "./course-sidebar-item";
-import {Logo} from "@/app/(dashboard)/_components/logo";
+import { CourseSidebarItem } from './course-sidebar-item'
+import { Logo } from '@/app/(dashboard)/_components/logo'
 
 interface CourseSidebarProps {
   course: Course & {
     chapters: (Chapter & {
-      userProgress: UserProgress[] | null;
+      userProgress: UserProgress[] | null
     })[]
-  };
-  progressCount: number;
-};
+  }
+  progressCount: number
+}
 
-export const CourseSidebar = async ({
-  course,
-  progressCount,
-}: CourseSidebarProps) => {
-  const { userId } = auth();
+export const CourseSidebar = async ({ course, progressCount }: CourseSidebarProps) => {
+  const { userId } = auth()
 
   if (!userId) {
-    return redirect("/");
+    return redirect('/')
   }
 
   const purchase = await db.purchase.findUnique({
@@ -32,23 +29,18 @@ export const CourseSidebar = async ({
       userId_courseId: {
         userId,
         courseId: course.id,
-      }
-    }
-  });
+      },
+    },
+  })
 
   return (
     <div className="h-full border-r flex flex-col overflow-y-auto shadow-sm">
       <div className="p-5 flex flex-col border-b">
         <Logo />
-        <h1 className="font-semibold mt-10">
-          {course.title}
-        </h1>
+        <h1 className="font-semibold mt-10">{course.title}</h1>
         {purchase && (
           <div className="mt-5">
-            <CourseProgress
-              variant="success"
-              value={progressCount}
-            />
+            <CourseProgress variant="success" value={progressCount} />
           </div>
         )}
       </div>

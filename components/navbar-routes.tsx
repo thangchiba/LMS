@@ -1,22 +1,22 @@
-"use client";
+'use client'
 
-import { UserButton, useAuth } from "@clerk/nextjs";
-import { usePathname } from "next/navigation";
-import { LogOut } from "lucide-react";
-import Link from "next/link";
+import { UserButton, useAuth } from '@clerk/nextjs'
+import { usePathname } from 'next/navigation'
+import { LogOut } from 'lucide-react'
+import Link from 'next/link'
 
-import { Button } from "@/components/ui/button";
-import { isTeacher } from "@/lib/teacher";
+import { Button } from '@/components/ui/button'
+import { isTeacher } from '@/lib/teacher'
 
-import { SearchInput } from "./search-input";
+import { SearchInput } from './search-input'
 
 export const NavbarRoutes = () => {
-  const { userId } = useAuth();
-  const pathname = usePathname();
+  const { userId } = useAuth()
+  const pathname = usePathname()
 
-  const isTeacherPage = pathname?.startsWith("/teacher");
-  const isCoursePage = pathname?.includes("/courses");
-  const isSearchPage = pathname === "/search";
+  const isTeacherPage = pathname?.startsWith('/teacher')
+  const isCoursePage = pathname?.includes('/courses')
+  const isSearchPage = pathname === '/search'
 
   return (
     <>
@@ -40,9 +40,7 @@ export const NavbarRoutes = () => {
             </Button>
           </Link>
         ) : null}
-        <UserButton
-          afterSignOutUrl="/"
-        />
+        <UserButton afterSignOutUrl="/" />
       </div>
     </>
   )

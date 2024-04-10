@@ -1,16 +1,16 @@
-import { auth } from "@clerk/nextjs";
-import { redirect } from "next/navigation";
+import { auth } from '@clerk/nextjs'
+import { redirect } from 'next/navigation'
 
-import { db } from "@/lib/db";
+import { db } from '@/lib/db'
 
-import { DataTable } from "./_components/data-table";
-import { columns } from "./_components/columns";
+import { DataTable } from './_components/data-table'
+import { columns } from './_components/columns'
 
 const CoursesPage = async () => {
-  const { userId } = auth();
+  const { userId } = auth()
 
   if (!userId) {
-    return redirect("/");
+    return redirect('/')
   }
 
   const courses = await db.course.findMany({
@@ -18,15 +18,15 @@ const CoursesPage = async () => {
       userId,
     },
     orderBy: {
-      createdAt: "desc",
+      createdAt: 'desc',
     },
-  });
+  })
 
-  return ( 
+  return (
     <div className="p-6">
       <DataTable columns={columns} data={courses} />
     </div>
-   );
+  )
 }
- 
-export default CoursesPage;
+
+export default CoursesPage
