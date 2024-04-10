@@ -79,7 +79,7 @@ export const VideoPlayer = ({
           )}
           onCanPlay={() => setIsReady(true)}
           onEnded={onEnd}
-          autoPlay
+          // autoPlay
           playbackId={playbackId}
         />
       )}

@@ -4,6 +4,7 @@ import { Inter } from 'next/font/google'
 import { ClerkProvider } from '@clerk/nextjs'
 import { ToastProvider } from '@/components/providers/toaster-provider'
 import { ConfettiProvider } from '@/components/providers/confetti-provider'
+import {Logo} from "@/app/(dashboard)/_components/logo";
 
 const inter = Inter({ subsets: ['latin'] })
 
