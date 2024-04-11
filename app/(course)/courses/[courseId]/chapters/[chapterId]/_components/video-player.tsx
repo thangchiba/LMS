@@ -1,12 +1,12 @@
 'use client'
 
 import axios from 'axios'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { toast } from 'react-hot-toast'
 import { useRouter } from 'next/navigation'
 import { Loader2, Lock } from 'lucide-react'
 import { useConfettiStore } from '@/hooks/use-confetti-store'
-import YouTube from 'react-youtube'
+import YouTube, { YouTubePlayer, YouTubeProps } from 'react-youtube'
 
 interface VideoPlayerProps {
   playbackId: string
@@ -30,6 +30,7 @@ export const VideoPlayer = ({
   const [isReady, setIsReady] = useState(false)
   const router = useRouter()
   const confetti = useConfettiStore()
+  const youtube = useRef<YouTubePlayer>(null)
 
   const onEnd = async () => {
     try {
@@ -42,7 +43,7 @@ export const VideoPlayer = ({
           confetti.onOpen()
         }
 
-        toast.success('Progress updated')
+        toast.success('Progress updated!')
         router.refresh()
 
         if (nextChapterId) {
@@ -53,9 +54,19 @@ export const VideoPlayer = ({
       toast.error('Something went wrong')
     }
   }
+  const onPlayerReady: YouTubeProps['onReady'] = (event) => {
+    // access to player in all event handlers via event.target
+    event.target.pauseVideo()
+    youtube.current = event.target
+  }
 
+  const onPause = async () => {
+    try {
+      // toast.error('No pause mat roi')
+    } catch (e) {}
+  }
   return (
-    <div className="relative aspect-video">
+    <div className="relative aspect-video w-full min-h-full">
       {!isReady && !isLocked && (
         <div className="absolute inset-0 flex items-center justify-center bg-slate-800">
           <Loader2 className="h-8 w-8 animate-spin text-secondary" />
@@ -68,32 +79,28 @@ export const VideoPlayer = ({
         </div>
       )}
       {!isLocked && (
-        // <MuxPlayer
-        //   title={title}
-        //   className={cn(!isReady && 'hidden')}
-        //   onCanPlay={() => setIsReady(true)}
-        //   onEnded={onEnd}
-        //   // autoPlay
-        //   playbackId={playbackId}
-        // />
-        <YouTube
-          videoId="mkFDlAXRNb4&ab"
-          // videoId={playbackId}
-          opts={{
-            height: '390',
-            width: '640',
-            playerVars: {
-              autoplay: 1,
-              controls: 1,
-              rel: 0,
-              showinfo: 0,
-              mute: 0,
-              origin: 'https://lms.thangchiba.com',
-            },
-          }}
-          onReady={() => setIsReady(true)}
-          onEnd={onEnd}
-        />
+        <div className="relative" style={{ width: '100%', paddingBottom: '56.25%' }}>
+          <YouTube
+            videoId="9NqthBLHBDg"
+            // videoId={playbackId} // Or any default video ID like "mkFDlAXRNb4"
+            opts={{
+              height: '100%',
+              width: '100%',
+              playerVars: {
+                autoplay: 1,
+                controls: 1,
+                rel: 0,
+                showinfo: 1,
+                mute: 0,
+                origin: 'https://lms.thangchiba.com',
+              },
+            }}
+            className="absolute top-0 left-0 right-0 bottom-0"
+            onReady={onPlayerReady}
+            onEnd={onEnd}
+            onPause={onPause}
+          />
+        </div>
       )}
     </div>
   )
