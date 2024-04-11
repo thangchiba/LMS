@@ -40,8 +40,8 @@ const ChapterIdPage = async ({ params }: { params: { courseId: string; chapterId
       {isLocked && (
         <Banner variant="warning" label="You need to purchase this course to watch this chapter." />
       )}
-      <div className="flex flex-col max-w-4xl mx-auto pb-20">
-        <div className="p-4">
+      <div className="flex flex-col max-w-6xl mx-auto pb-20">
+        <div className="px-4">
           <VideoPlayer
             chapterId={params.chapterId}
             title={chapter.title}

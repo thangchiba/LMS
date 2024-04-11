@@ -31,6 +31,7 @@ export const VideoPlayer = ({
   const router = useRouter()
   const confetti = useConfettiStore()
   const youtube = useRef<YouTubePlayer>(null)
+  const [showDialog, setShowDialog] = useState(false) // State to manage dialog visibility
 
   const onEnd = async () => {
     try {
@@ -55,7 +56,7 @@ export const VideoPlayer = ({
     }
   }
   const onPlayerReady: YouTubeProps['onReady'] = (event) => {
-    // access to player in all event handlers via event.target
+    setIsReady(true)
     event.target.pauseVideo()
     youtube.current = event.target
   }
@@ -65,6 +66,28 @@ export const VideoPlayer = ({
       // toast.error('No pause mat roi')
     } catch (e) {}
   }
+  const closeDialogAndResumeVideo = () => {
+    setShowDialog(false)
+    youtube.current?.playVideo() // Resume video playback when the dialog is closed
+  }
+
+  // useEffect(() => {
+  //   const handleKeyPress = (event: KeyboardEvent) => {
+  //     if (event.key === 'b' || event.key === 'B') {
+  //       setShowDialog(true)
+  //       youtube.current?.pauseVideo()
+  //     }
+  //   }
+  //
+  //   // Attach the event listener to the document
+  //   document.addEventListener('keydown', handleKeyPress)
+  //
+  //   return () => {
+  //     // Don't forget to remove the event listener
+  //     document.removeEventListener('keydown', handleKeyPress)
+  //   }
+  // }, [])
+
   return (
     <div className="relative aspect-video w-full min-h-full">
       {!isReady && !isLocked && (
@@ -80,26 +103,36 @@ export const VideoPlayer = ({
       )}
       {!isLocked && (
         <div className="relative" style={{ width: '100%', paddingBottom: '56.25%' }}>
-          <YouTube
-            videoId="9NqthBLHBDg"
-            // videoId={playbackId} // Or any default video ID like "mkFDlAXRNb4"
-            opts={{
-              height: '100%',
-              width: '100%',
-              playerVars: {
-                autoplay: 1,
-                controls: 1,
-                rel: 0,
-                showinfo: 1,
-                mute: 0,
-                origin: 'https://lms.thangchiba.com',
-              },
-            }}
-            className="absolute top-0 left-0 right-0 bottom-0"
-            onReady={onPlayerReady}
-            onEnd={onEnd}
-            onPause={onPause}
-          />
+          <div style={{ borderRadius: '50px', overflow: 'hidden', width: '100%', height: '100%' }}>
+            <YouTube
+              videoId="9NqthBLHBDg"
+              opts={{
+                height: '100%',
+                width: '100%',
+                playerVars: {
+                  autoplay: 1,
+                  controls: 2,
+                  rel: 0,
+                  showinfo: 1,
+                  mute: 0,
+                  origin: 'https://lms.thangchiba.com',
+                },
+              }}
+              loading="lazy"
+              className="absolute top-0 left-0 right-0 bottom-0"
+              onReady={onPlayerReady}
+              onEnd={onEnd}
+              onPause={onPause}
+            />
+          </div>
+        </div>
+      )}
+      {showDialog && (
+        <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-4">
+            <textarea className="w-full h-32" placeholder="Enter content here..." />
+            <button onClick={closeDialogAndResumeVideo}>Close</button>
+          </div>
         </div>
       )}
     </div>
